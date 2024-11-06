@@ -31,10 +31,17 @@ const FunctionFlowDiagram: React.FC = () => {
     inputPos: Position,
     outputPos: Position
   ) => {
-    setConnections((prevConnections: Connection[]) => [
-      ...prevConnections,
-      { id, inputPos, outputPos }
-    ])
+    setConnections((prevConnections: Connection[]) => {
+      let newConnections = [...prevConnections];
+      let currIdx = newConnections.findIndex(el => el.id === id);
+      if(currIdx >= 0){
+        newConnections[currIdx] = { id, inputPos, outputPos }
+      }
+      else{
+        newConnections.push({ id, inputPos, outputPos} )
+      }
+      return newConnections;
+    })
   }
 
   const getConnectionById = (id: string): Connection =>

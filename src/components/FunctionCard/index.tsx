@@ -28,14 +28,30 @@ const FunctionCard: React.FC<FunctionCardProps> = ({
   const calledOnce = useRef<Boolean>(false)
 
   useEffect(() => {
-    if (onConnect && !calledOnce.current) {
-      // Get positions and send them to the parent for connection
-      const inputPos = getPosition(inputRef)
-      const outputPos = getPosition(outputRef)
-      onConnect(id, inputPos, outputPos)
-      calledOnce.current = true
+    const updatePositions = () => {
+      if (onConnect) {
+        // Get positions and send them to the parent for connection
+        const inputPos = getPosition(inputRef)
+        const outputPos = getPosition(outputRef)
+        onConnect(id, inputPos, outputPos)
+      }
+    };
+
+    // Call it once initially
+    if (!calledOnce.current && id ){
+      updatePositions();
+      calledOnce.current = true;
     }
-  }, [onConnect])
+
+    // Add event listener for window resize
+    window.addEventListener('resize', updatePositions);
+
+    // Cleanup on component unmount
+    return () => {
+      window.removeEventListener('resize', updatePositions);
+    };
+  }, [onConnect, id]);
+
 
   //This is for a particular function // This console is for checking output and not a mistake
   console.log({id , equation , input , output})
