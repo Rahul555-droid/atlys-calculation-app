@@ -2,7 +2,7 @@
 //infinite scroll with virtualization
 //file explorer
 
-import React, { useEffect, useMemo, useState , useRef } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 
 const options = Array.from({ length: 200 }, (_, index) => `option ${index + 1}`)
 
@@ -115,8 +115,6 @@ export const InfiniteScroll = () => {
   const [isLoading, setIsLoading] = useState(false) // Loading state
   const containerRef = useRef(null)
 
-
-
   // Mock API call to fetch more items
   const fetchMoreItems = () => {
     return new Promise((resolve) => {
@@ -178,38 +176,38 @@ export const InfiniteScroll = () => {
   )
 }
 
+// Generate the list of items
+const items = Array.from({ length: totalItems }, (_, i) => `Item ${i + 1}`)
+
 export const VirtualizedList = () => {
-  const totalItems = 10000; // Total number of items
-  const itemHeight = 50; // Height of each item (in pixels)
-  const viewportHeight = 500; // Height of the viewport
-  const buffer = 5; // Number of extra items to render above and below the viewport
+  const totalItems = 10000 // Total number of items
+  const itemHeight = 50 // Height of each item (in pixels)
+  const viewportHeight = 500 // Height of the viewport
+  const buffer = 5 // Number of extra items to render above and below the viewport
 
-  const [startIndex, setStartIndex] = useState(0); // Index of the first visible item
-  const [endIndex, setEndIndex] = useState(0); // Index of the last visible item
+  const [startIndex, setStartIndex] = useState(0) // Index of the first visible item
+  const [endIndex, setEndIndex] = useState(0) // Index of the last visible item
 
-  const viewportRef = useRef(null); // Ref for the scrollable container
+  const viewportRef = useRef(null) // Ref for the scrollable container
 
   useEffect(() => {
     // Initial calculation of visible items
-    calculateVisibleItems();
-  }, []);
+    calculateVisibleItems()
+  }, [])
 
   const calculateVisibleItems = () => {
     if (viewportRef.current) {
-      const scrollTop = viewportRef.current.scrollTop;
-      const startIdx = Math.floor(scrollTop / itemHeight);
-      const visibleCount = Math.ceil(viewportHeight / itemHeight);
-      setStartIndex(Math.max(0, startIdx - buffer));
-      setEndIndex(Math.min(totalItems - 1, startIdx + visibleCount + buffer));
+      const scrollTop = viewportRef.current.scrollTop
+      const startIdx = Math.floor(scrollTop / itemHeight)
+      const visibleCount = Math.ceil(viewportHeight / itemHeight)
+      setStartIndex(Math.max(0, startIdx - buffer))
+      setEndIndex(Math.min(totalItems - 1, startIdx + visibleCount + buffer))
     }
-  };
+  }
 
   const handleScroll = () => {
-    calculateVisibleItems();
-  };
-
-  // Generate the list of items
-  const items = Array.from({ length: totalItems }, (_, i) => `Item ${i + 1}`);
+    calculateVisibleItems()
+  }
 
   return (
     <div
@@ -221,17 +219,17 @@ export const VirtualizedList = () => {
       <div
         style={{
           height: `${totalItems * itemHeight}px`, // Total height of the list
-          position: "relative",
+          position: 'relative'
         }}
       >
         {items.slice(startIndex, endIndex + 1).map((item, index) => (
           <div
             key={startIndex + index}
             style={{
-              position: "absolute",
+              position: 'absolute',
               top: `${(startIndex + index) * itemHeight}px`,
               height: `${itemHeight}px`,
-              width: "100%",
+              width: '100%'
             }}
             className="bg-white border-b flex items-center justify-center"
           >
@@ -240,7 +238,7 @@ export const VirtualizedList = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default CustomSelect
